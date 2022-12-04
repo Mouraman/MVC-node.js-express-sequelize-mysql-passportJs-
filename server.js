@@ -35,7 +35,7 @@ app.engine(
 );
 app.set("view engine", ".hbs");
 app.get("/", function (req, res) {
-  res.send("Welcome to dojo Village");
+  res.send("Welcome to node.js api");
 });
 //Models
 const models = require("./app/models");
