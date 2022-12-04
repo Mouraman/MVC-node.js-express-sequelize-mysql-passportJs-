@@ -1,4 +1,4 @@
-const bcrypt = require("bcryptjs");
+const bCrypt = require("bcryptjs");
 const e = require("express");
 
 module.exports = function (passport, user) {
@@ -42,17 +42,24 @@ module.exports = function (passport, user) {
             });
           }
         });
+        //serialize
+        passport.serializeUser(function (user, done) {
+          done(null, user.id);
+        });
+        // deserialize user
+        passport.deserializeUser(function (id, done) {
+          User.findByPk(id).then(function (user) {
+            if (user) {
+              done(null, user.get());
+            } else {
+              done(user.errors, null);
+            }
+          });
+        });
       }
     )
   );
-  //serialize
-  passport.serializeUser(function (user, done) {
-    done(null, user.id);
-  });
-  //serialize
-  passport.serializeUser(function (user, done) {
-    done(null, user.id);
-  });
+
   //LOCAL SIGNIN
   passport.use(
     "local-signin",
@@ -64,8 +71,8 @@ module.exports = function (passport, user) {
         passReqToCallback: true, // allows us to pass back the entire request to the callback
       },
       function (email, password, done) {
-        var User = user;
-        var isValidPassword = function (userpass, password) {
+        let User = user;
+        let isValidPassword = function (userpass, password) {
           return bCrypt.compareSync(password, userpass);
         };
         User.findOne({
@@ -84,7 +91,7 @@ module.exports = function (passport, user) {
                 message: "Incorrect password.",
               });
             }
-            var userinfo = user.get();
+            let userinfo = user.get();
             return done(null, userinfo);
           })
           .catch(function (err) {

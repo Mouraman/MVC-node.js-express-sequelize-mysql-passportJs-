@@ -11,17 +11,15 @@ module.exports = function (sequelize, DataTypes) {
       },
       username: {
         type: DataTypes.STRING(33),
-        validate: {
-          isUnique: true,
-        },
+        unique: true,
         allowNull: false,
       },
       email: {
         type: DataTypes.STRING(66),
         validate: {
           isEmail: true,
-          isUnique: true,
         },
+        unique: true,
         allowNull: false,
       },
       password: {
@@ -30,7 +28,6 @@ module.exports = function (sequelize, DataTypes) {
       },
       last_login: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       status: {
         type: DataTypes.ENUM("active", "inactive"),
