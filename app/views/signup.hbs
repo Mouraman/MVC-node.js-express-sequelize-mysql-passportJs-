@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Sign up layout</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <h1>Dojo village</h1>
+    <h2>Registration</h2>
+    <form id="signup" name="signup" method="post" action="/signup">
+      <label for="username">Nickname:</label>
+      <input name="username" type="text" minlength="3" maxlength="33" />
+      <label for="email">Email Address: </label>
+      <input
+        class="text"
+        name="email"
+        type="email"
+        minlength="6"
+        maxlength="66"
+      />
+      <label for="password">Password: </label>
+      <input name="password" type="password" minlength="6" maxlength="22" />
+      <input class="btn" type="submit" value="Register" />
+    </form>
+  </body>
+</html>
