@@ -19,7 +19,10 @@ module.exports = function (app, passport) {
     })
   );
   function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    res.redirect("/signin");
+    if (req.isAuthenticated()) {
+      return next();
+    } else {
+      res.redirect("/signin");
+    }
   }
 };

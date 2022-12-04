@@ -42,20 +42,6 @@ module.exports = function (passport, user) {
             });
           }
         });
-        //serialize
-        passport.serializeUser(function (user, done) {
-          done(null, user.id);
-        });
-        // deserialize user
-        passport.deserializeUser(function (id, done) {
-          User.findByPk(id).then(function (user) {
-            if (user) {
-              done(null, user.get());
-            } else {
-              done(user.errors, null);
-            }
-          });
-        });
       }
     )
   );
@@ -70,7 +56,7 @@ module.exports = function (passport, user) {
         passwordField: "password",
         passReqToCallback: true, // allows us to pass back the entire request to the callback
       },
-      function (email, password, done) {
+      function (_, email, password, done) {
         let User = user;
         let isValidPassword = function (userpass, password) {
           return bCrypt.compareSync(password, userpass);
@@ -80,18 +66,18 @@ module.exports = function (passport, user) {
             email: email,
           },
         })
-          .then(function (user) {
-            if (!user) {
+          .then(function (User) {
+            if (!User) {
               return done(null, false, {
                 message: "Email does not exist",
               });
             }
-            if (!isValidPassword(user.password, password)) {
+            if (!isValidPassword(User.password, password)) {
               return done(null, false, {
                 message: "Incorrect password.",
               });
             }
-            let userinfo = user.get();
+            let userinfo = User.get();
             return done(null, userinfo);
           })
           .catch(function (err) {
@@ -100,6 +86,20 @@ module.exports = function (passport, user) {
               message: "Something went wrong with your Signin",
             });
           });
+        //serialize
+        passport.serializeUser(function (user, done) {
+          done(null, user.id);
+        });
+        // deserialize user
+        passport.deserializeUser(function (id, done) {
+          User.findByPk(id).then(function (user) {
+            if (user) {
+              done(null, user.get());
+            } else {
+              done(user.errors, null);
+            }
+          });
+        });
       }
     )
   );
