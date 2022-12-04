@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "dojo_village",
+    "database": "apidb",
     "host": "localhost",
     "dialect": "mysql"
   },
