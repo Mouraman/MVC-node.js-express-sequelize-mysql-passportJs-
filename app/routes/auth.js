@@ -1,4 +1,5 @@
 const authController = require("../controllers/authController.js");
+const flash = require("connect-flash");
 module.exports = function (app, passport) {
   app.get("/signup", authController.signup);
   app.get("/signin", authController.signin);
@@ -7,6 +8,7 @@ module.exports = function (app, passport) {
     passport.authenticate("local-signup", {
       successRedirect: "/dashboard",
       failureRedirect: "/signup",
+      failureFlash: true,
     })
   );
   app.get("/dashboard", isLoggedIn, authController.dashboard);
@@ -16,6 +18,7 @@ module.exports = function (app, passport) {
     passport.authenticate("local-signin", {
       successRedirect: "/dashboard",
       failureRedirect: "/signin",
+      failureFlash: true,
     })
   );
   function isLoggedIn(req, res, next) {

@@ -1,5 +1,4 @@
 const bCrypt = require("bcryptjs");
-const e = require("express");
 
 module.exports = function (passport, user) {
   let User = user;
@@ -20,9 +19,9 @@ module.exports = function (passport, user) {
           where: {
             email: email,
           },
-        }).then(function (user) {
-          if (user) {
-            return done(null, false, {
+        }).then(function (User) {
+          if (User) {
+            return send(null, false, {
               message: "That email is already taken",
             });
           } else {
@@ -66,7 +65,10 @@ module.exports = function (passport, user) {
             email: email,
           },
         })
-          .then(function (User) {
+          .then(function (err, User) {
+            if (err) {
+              return done(err);
+            }
             if (!User) {
               return done(null, false, {
                 message: "Email does not exist",
