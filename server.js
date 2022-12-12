@@ -4,7 +4,7 @@ const passpartout = require("passport");
 const session = require("express-session");
 const env = require("dotenv").config();
 const exphbs = require("express-handlebars");
-
+const flash = require("connect-flash");
 app.use(
   express.urlencoded({
     extended: true,
@@ -23,7 +23,7 @@ app.use(
 ); // session secret
 app.use(passpartout.initialize());
 app.use(passpartout.session()); // persistent login sessions
-
+app.use(flash());
 //For Handlebars
 app.set("views", "./app/views");
 app.engine(
@@ -40,8 +40,10 @@ app.get("/", function (req, res) {
 });
 //Models
 const models = require("./app/models");
+
 //Routes
 const authRoute = require("./app/routes/auth.js")(app, passpartout);
+
 //load passport strategies
 require("./app/config/passport/passport.js")(passpartout, models.user);
 //Sync Database

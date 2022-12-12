@@ -1,5 +1,4 @@
 const bCrypt = require("bcryptjs");
-
 module.exports = function (passport, user) {
   let User = user;
   const LocalStrategy = require("passport-local").Strategy;
@@ -15,32 +14,40 @@ module.exports = function (passport, user) {
         let generateHash = function (password) {
           return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
         };
-        User.findOne({
-          where: {
-            email: email,
-          },
-        }).then(function (User) {
-          if (User) {
-            return send(null, false, {
-              message: "That email is already taken",
-            });
-          } else {
-            let userPassword = generateHash(password);
-            let data = {
+        User.findOne(
+          {
+            where: {
               email: email,
-              password: userPassword,
-              username: req.body.username,
-            };
-            User.create(data).then(function (newUser, created) {
-              if (!newUser) {
-                return done(null, false);
-              }
-              if (newUser) {
-                return done(null, newUser);
-              }
-            });
+            },
+          },
+          (err, user) => {
+            if (err) {
+              return done(err);
+            }
+            if (user) {
+              return done(
+                null,
+                false,
+                req.flash("message", "That email is already taken")
+              );
+            } else {
+              let userPassword = generateHash(password);
+              let data = {
+                email: email,
+                password: userPassword,
+                username: req.body.username,
+              };
+              User.create(data).then(function (newUser, created) {
+                if (!newUser) {
+                  return done(null, false);
+                }
+                if (newUser) {
+                  return done(null, newUser);
+                }
+              });
+            }
           }
-        });
+        );
       }
     )
   );

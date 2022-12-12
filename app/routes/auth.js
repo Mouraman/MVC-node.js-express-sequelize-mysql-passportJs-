@@ -1,5 +1,5 @@
 const authController = require("../controllers/authController.js");
-const flash = require("connect-flash");
+
 module.exports = function (app, passport) {
   app.get("/signup", authController.signup);
   app.get("/signin", authController.signin);

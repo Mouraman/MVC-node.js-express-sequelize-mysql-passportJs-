@@ -1,6 +1,7 @@
 let exportations = (module.exports = {});
 exportations.signup = function (req, res) {
-  res.render("signup");
+  var message = req.flash("message");
+  res.render("signup", { message });
 };
 exportations.signin = function (req, res) {
   res.render("signin");
